@@ -1,0 +1,32 @@
+#border{
+/*  border: 2px solid black;*/
+}
+
+li {
+  width: 20px;
+  height: 20px;
+  float: left;
+/*  background: blue;*/
+  list-style: none;
+  border: 1px solid black;
+}
+
+ul {
+
+}
+
+ul:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.snake {
+  background: green;
+  border: 1px solid green;
+}
+
+.apple {
+  background: red;
+  border: 1px solid red;
+}

@@ -6,20 +6,22 @@
 
   };
 
-  View.prototype.render = function () {
-    this.element.html(this.board.render());
-  };
-
   View.prototype.start = function() {
     this.board = new Game.Board()
 //    this.board.run()
 
-    var ui = this
+    var ui = this;
     this.startHandlers();
+    this.initializeHtml();
 
-    setInterval(function(){
+    this.intervalId = setInterval(function(){
       ui.board.step();
-      ui.render();
+      if (ui.board.gameOver) {
+        clearInterval(ui.intervalId)
+        alert("You died!");
+      } else {
+        ui.render();
+      }
     }, 600)
   };
 
@@ -45,6 +47,38 @@
       }
     })
   };
+
+  View.prototype.initializeHtml = function () {
+    $("body").append("<ul id='border'></ul>");
+    for(var i=0; i< Game.BOARD_SIZE; i++){
+      $("ul#border").append("<ul id='" + i + "'></ul>");
+      for(var j=0; j < Game.BOARD_SIZE; j++){
+        $("ul#"+i).append("<li class='" + j + "'></li>");
+      };
+    };
+  };
+
+  View.prototype.render = function () {
+    var board = this.board.board;
+    $("#border").children().each(function (i, element) {
+
+      $(element).children().each(function (j, child) {
+        $(child).removeClass();
+
+        console.log(i, j, board[i][j])
+        switch(board[i][j]){
+        case "A":
+          $(child).addClass("apple");
+          break;
+        case "S":
+          $(child).addClass("snake");
+          break;
+        }
+      })
+    })
+  };
+
+
 
 
 })(this);

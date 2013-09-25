@@ -15,11 +15,32 @@
     this.board.changeChar(this.segments.pop(), "_");
 
     this.board.changeChar(added, "S")
+    if (this.hitSomething(added)) {
+      this.board.endGame();
+    }
   };
 
   Snake.prototype.turn = function (direction) {
     this.dir = direction;
   };
+
+  Snake.prototype.hitSomething = function (headCoord){
+  // x && y 0 > && head < Game.BOARD_SIZE
+    var row = headCoord.row;
+    var col = headCoord.col;
+    if (row < 0 || col < 0 || row >= Game.BOARD_SIZE || col >= Game.BOARD_SIZE){
+      return true;
+    }
+
+    this.segments.forEach(function(coord){
+      if (row === coord.row && col === coord.col) {
+        return true;
+      }
+
+    });
+    return false;
+  }
+
 
   var Coord = Game.Coord = function(row, col) {
     this.row = row;
@@ -52,6 +73,8 @@
     this.snake = new Snake(this);
     this.board = this.createBoard();
     this.initializeSnake();
+    this.intervalId;
+    this.gameOver = false;
   }
 
   Board.prototype.createBoard = function () {
@@ -105,10 +128,16 @@
 
   Board.prototype.run = function () {
     var game = this;
-    setInterval(function(){
+    this.intervalId = setInterval(function(){
       game.step();
     }, 600)
   };
+
+  Board.prototype.endGame = function () {
+    var game = this;
+    this.gameOver = true;
+  };
+
 })(this);
 
 
