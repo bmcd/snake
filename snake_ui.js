@@ -22,7 +22,7 @@
       } else {
         ui.render();
       }
-    }, 600)
+    }, 200)
   };
 
   View.prototype.startHandlers = function () {
@@ -64,8 +64,6 @@
 
       $(element).children().each(function (j, child) {
         $(child).removeClass();
-
-        console.log(i, j, board[i][j])
         switch(board[i][j]){
         case "A":
           $(child).addClass("apple");

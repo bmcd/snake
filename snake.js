@@ -6,39 +6,76 @@
   var Snake = Game.Snake = function(board) {
     this.dir = "E";
     this.board = board;
-    this.segments = [new Coord(10,10)];//head's at [0]
+    this.segments = [new Coord(Math.floor(Game.BOARD_SIZE / 2), Math.floor(Game.BOARD_SIZE / 2))];//head's at [0]
+	this.apple = 4;
   }
 
   Snake.prototype.move = function(){
     var added = Coord.plus(this.dir, this.segments[0]);
-    this.segments.unshift(added);
-    this.board.changeChar(this.segments.pop(), "_");
-
-    this.board.changeChar(added, "S")
     if (this.hitSomething(added)) {
       this.board.endGame();
+	  return null;
     }
+    this.segments.unshift(added);
+	if (!this.apple) {
+	    this.board.changeChar(this.segments.pop(), "_");
+	} else {
+		this.apple -= 1;
+	}
+	
+	if (this.board.isApple(added)) {
+		this.apple += 4;
+		this.board.newApple();
+	}
+	
+	console.log(added.row);
+    this.board.changeChar(added, "S")
+    
   };
 
   Snake.prototype.turn = function (direction) {
-    this.dir = direction;
+	switch (this.dir) {
+	case "N":
+		if (direction !== "S") {
+			this.dir = direction;
+		}
+		break;
+	case "E":
+		if (direction !== "W") {
+			this.dir = direction;
+		}
+		break;
+	case "S":
+		if (direction !== "N") {
+			this.dir = direction;
+		}
+		break;
+	case "W":
+		if (direction !== "E") {
+			this.dir = direction;
+		}
+		break;
+	}
   };
 
   Snake.prototype.hitSomething = function (headCoord){
   // x && y 0 > && head < Game.BOARD_SIZE
     var row = headCoord.row;
     var col = headCoord.col;
-    if (row < 0 || col < 0 || row >= Game.BOARD_SIZE || col >= Game.BOARD_SIZE){
-      return true;
+	var colided = false;
+    if ((row < 0 || col < 0) || (row >= Game.BOARD_SIZE || col >= Game.BOARD_SIZE)) {
+      colided = true;
     }
-
+	
     this.segments.forEach(function(coord){
-      if (row === coord.row && col === coord.col) {
-        return true;
+		console.log(row + " " + col);
+		console.log(coord.row + " " + coord.col);
+      if (row == coord.row && col == coord.col) {
+        colided = true;
       }
 
     });
-    return false;
+    return colided;
   }
 
 
@@ -73,6 +110,7 @@
     this.snake = new Snake(this);
     this.board = this.createBoard();
     this.initializeSnake();
+	this.newApple()
     this.intervalId;
     this.gameOver = false;
   }
@@ -88,6 +126,20 @@
 
 
     return board;
+  };
+  
+  Board.prototype.newApple = function () {
+  	var row = Math.floor(Math.random() * Game.BOARD_SIZE);
+  	var col = Math.floor(Math.random() * Game.BOARD_SIZE);
+	if (this.board[row][col] === "_") {
+		this.board[row][col] = "A"
+	} else {
+		this.newApple();
+	}
+  };
+  
+  Board.prototype.isApple = function (coord) {
+	  return (this.board[coord.row][coord.col] === "A");
   };
 
   Board.prototype.render = function () {
