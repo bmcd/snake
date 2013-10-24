@@ -22,7 +22,7 @@
       } else {
         ui.render();
       }
-    }, 200)
+    }, 30)
   };
 
   View.prototype.startHandlers = function () {
@@ -49,9 +49,9 @@
   };
 
   View.prototype.initializeHtml = function () {
-    $("body").append("<ul id='border'></ul>");
+    $("body").append("<div id='border'></div>");
     for(var i=0; i< Game.BOARD_SIZE; i++){
-      $("ul#border").append("<ul id='" + i + "'></ul>");
+      $("div#border").append("<ul id='" + i + "'></ul>");
       for(var j=0; j < Game.BOARD_SIZE; j++){
         $("ul#"+i).append("<li class='" + j + "'></li>");
       };

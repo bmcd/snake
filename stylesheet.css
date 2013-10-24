@@ -1,23 +1,29 @@
-#border{
-/*	width: 440;*/
-/*  border: 2px solid black;*/
-/*	background: black;*/
+ul, li, div {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style: none;
+}
+
+body {
+	background: #ecf0f1;
+}
+
+#border {
+	border: 1px solid #bdc3c7;
+	width: 640px;
+	background: black;
+	margin: 20px auto;
 }
 
 li {
-  width: 20px;
-  height: 20px;
+  width: 8px;
+  height: 8px;
   float: left;
-/*  background: blue;*/
   list-style: none;
-  border: 1px solid black;
 }
 
-ul {
-
-}
-
-ul:after {
+ul:after, #border:after {
   content: "";
   clear: both;
   display: table;
@@ -25,10 +31,8 @@ ul:after {
 
 .snake {
   background: green;
-  border: 1px solid green;
 }
 
 .apple {
   background: red;
-  border: 1px solid red;
 }
